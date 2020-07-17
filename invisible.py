@@ -23,6 +23,7 @@ def deletion_date():
 
 
 def purger():
+    n = 0
     print('Deleting log files..')
     for item in response:
         collection = item['logStreams']
@@ -32,11 +33,13 @@ def purger():
                     logGroupName=f'/aws/lambda/{app_name}',
                     logStreamName=f"{collected_value['logStreamName']}"
                 )
+                n = n + 1
                 if (resp['ResponseMetadata']['HTTPStatusCode']) == 200:
                     pass
                 else:
                     print(f"Unable to purge logStream: {collected_value['logStreamName']}")
                     pass
+    return n
 
 
 if __name__ == '__main__':
