@@ -1,4 +1,3 @@
-import math
 from datetime import datetime, timedelta
 
 import boto3
@@ -17,7 +16,7 @@ def login():
 
 def deletion_date():
     tod = datetime.today() - timedelta(days=7)
-    epoch_date = str(math.trunc(tod.timestamp()))
+    epoch_date = str(int(tod.timestamp()))
     selected_date = int(epoch_date.ljust(13, '0'))
     return selected_date
 
@@ -45,4 +44,4 @@ def purger():
 if __name__ == '__main__':
     client_, response = login()
     req_date = deletion_date()
-    print(f'\n{purger()} log streams were purged successfully.')
+    print(f'\n{purger()} log streams were purged for the function {app_name}')
