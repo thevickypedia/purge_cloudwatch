@@ -9,13 +9,13 @@ def login():
     client = boto3.client('logs')
     paginator = client.get_paginator('describe_log_streams')
     response_iterator = paginator.paginate(
-        logGroupName=f'/aws/lambda/{app_name}',
+        logGroupName=f'/aws/lambda/{app_name}'
     )
     return client, response_iterator
 
 
 def deletion_date():
-    tod = datetime.today() - timedelta(days=0)
+    tod = datetime.today() - timedelta(days=7)
     h_date = tod.strftime('%B %d, %Y')
     print(f'Due Date: {h_date}')
     epoch_date = str(int(tod.timestamp()))
