@@ -25,6 +25,7 @@ def deletion_date():
 
 def purger():
     n = 0
+    app_memory = 0
     print('Attempting to delete log files..')
     try:
         for item in response:
@@ -37,14 +38,16 @@ def purger():
                     )
                     n = n + 1
                     if (resp['ResponseMetadata']['HTTPStatusCode']) == 200:
-                        pass
+                        app_memory += round(float(collected_value['storedBytes'] / 1000), 2)
                     else:
                         print(f"Unable to purge logStream: {collected_value['logStreamName']}")
                         pass
         if n == 0:
             return f'No logs were found before {due_date}'
+        elif n == 1:
+            return f"{n} log stream was purged for the function {app_name}. Memory released: {app_memory} KB"
         else:
-            return f"{n} log streams were purged for the function {app_name}."
+            return f"{n} log streams were purged for the function {app_name}. Memory released: {app_memory} KB"
     except Exception:
         return f"Unable to find the lambda function. Make sure the function name '{app_name}' is correct and exists!!"
 
