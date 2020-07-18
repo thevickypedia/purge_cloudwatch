@@ -26,24 +26,27 @@ def deletion_date():
 def purger():
     n = 0
     print('Attempting to delete log files..')
-    for item in response:
-        collection = item['logStreams']
-        for collected_value in collection:
-            if collected_value['creationTime'] < req_date:
-                resp = client_.delete_log_stream(
-                    logGroupName=f'/aws/lambda/{app_name}',
-                    logStreamName=f"{collected_value['logStreamName']}"
-                )
-                n = n + 1
-                if (resp['ResponseMetadata']['HTTPStatusCode']) == 200:
-                    pass
-                else:
-                    print(f"Unable to purge logStream: {collected_value['logStreamName']}")
-                    pass
-    if n == 0:
-        return f'No logs were found before {due_date}'
-    else:
-        return f"{n} log streams were purged for the function {app_name}."
+    try:
+        for item in response:
+            collection = item['logStreams']
+            for collected_value in collection:
+                if collected_value['creationTime'] < req_date:
+                    resp = client_.delete_log_stream(
+                        logGroupName=f'/aws/lambda/{app_name}',
+                        logStreamName=f"{collected_value['logStreamName']}"
+                    )
+                    n = n + 1
+                    if (resp['ResponseMetadata']['HTTPStatusCode']) == 200:
+                        pass
+                    else:
+                        print(f"Unable to purge logStream: {collected_value['logStreamName']}")
+                        pass
+        if n == 0:
+            return f'No logs were found before {due_date}'
+        else:
+            return f"{n} log streams were purged for the function {app_name}."
+    except Exception:
+        return f"Unable to find the lambda function. Make sure the function name '{app_name}' is correct and exists!!"
 
 
 if __name__ == '__main__':
