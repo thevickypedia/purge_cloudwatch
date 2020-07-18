@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import boto3
 
-app_name = 'robinhood'
+app_name = 'purge_logs'
 
 
 def login():
@@ -15,15 +15,17 @@ def login():
 
 
 def deletion_date():
-    tod = datetime.today() - timedelta(days=7)
+    tod = datetime.today() - timedelta(days=0)
+    h_date = tod.strftime('%B %d, %Y')
+    print(f'Due Date: {h_date}')
     epoch_date = str(int(tod.timestamp()))
     selected_date = int(epoch_date.ljust(13, '0'))
-    return selected_date
+    return selected_date, h_date
 
 
 def purger():
     n = 0
-    print('Deleting log files..')
+    print('Attempting to delete log files..')
     for item in response:
         collection = item['logStreams']
         for collected_value in collection:
@@ -38,10 +40,13 @@ def purger():
                 else:
                     print(f"Unable to purge logStream: {collected_value['logStreamName']}")
                     pass
-    return n
+    if n == 0:
+        return f'No logs were found before {due_date}'
+    else:
+        return f"{n} log streams were purged for the function {app_name}."
 
 
 if __name__ == '__main__':
     client_, response = login()
-    req_date = deletion_date()
-    print(f'\n{purger()} log streams were purged for the function {app_name}')
+    req_date, due_date = deletion_date()
+    print(purger())
