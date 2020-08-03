@@ -43,8 +43,8 @@ def lambda_handler(event, context):
                         n3 = n3 + 1
                         app3_m += round(float(collected_value['storedBytes'] / 1000), 2)
 
-    data = f"Number of logs purged for {app1}: {n1} Memory released: {app1_m} KB\n" \
-           f"Number of logs purged for {app2}: {n2} Memory released: {app2_m} KB\n" \
-           f"Number of logs purged for {app3}: {n3} Memory released: {app3_m} KB\n"
+    data = f"Number of logs purged for {app1}: {n1} Memory released: {round(float(app1_m), 2)} KB\n" \
+           f"Number of logs purged for {app2}: {n2} Memory released: {round(float(app2_m), 2)} KB\n" \
+           f"Number of logs purged for {app3}: {n3} Memory released: {round(float(app3_m), 2)} KB\n"
 
     print(data)
